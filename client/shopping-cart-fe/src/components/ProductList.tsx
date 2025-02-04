@@ -1,14 +1,22 @@
 import Product from './Product';
+
+import {
+  ProductListProps,
+} from '../types';
  
-const ProductList = () => {
+const ProductList = ({ products }: ProductListProps) => {
+  const allProducts = () => {
+    return products.map(
+      (product) => <Product {...product} />
+    );
+  }
+
   return (
     <main>
       <div className="product-listing">
         <h2>Products</h2>
         <ul className="product-list">
-          <Product name="Amazon Kindle E-reader" price="$79.99" quantity={5} />
-          <Product name="Apple 10.5-Inch iPad Pro" price="$649.99" quantity={2} />
-          <Product name="Yamaha Portable Keyboard" price="$159.99" quantity={0} />
+          {allProducts()}
         </ul>
       </div>
     </main>

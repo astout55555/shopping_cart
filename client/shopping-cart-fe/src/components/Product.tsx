@@ -1,10 +1,8 @@
-interface ProductProps {
-  name: string,
-  price: string,
-  quantity: number
-}
+import {
+  ProductType,
+} from '../types'
 
-const Product = ({name, price, quantity}: ProductProps) => {
+const Product = ({title, price, quantity}: ProductType) => {
   const addToCartButton = (quantity: number) => {
     if (quantity > 0) {
       return (<button className="add-to-cart">Add to Cart</button>);
@@ -16,7 +14,7 @@ const Product = ({name, price, quantity}: ProductProps) => {
   return (
     <li className="product">
       <div className="product-details">
-        <h3>{name}</h3>
+        <h3>{title}</h3>
         <p className="price">{price}</p>
         <p className="quantity">{quantity} left in stock</p>
         <div className="actions product-actions">
