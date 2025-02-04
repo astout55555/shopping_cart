@@ -12,6 +12,10 @@ const Cart = ({ cartItems }: CartProps) => {
     );
   }
 
+  const totalPrice = () => {
+    return cartItems.map((item) => item.price).reduce((accum, price) => accum + price);
+  }
+
   if (cartItems.length === 0) {
     return (
       <>
@@ -43,7 +47,9 @@ const Cart = ({ cartItems }: CartProps) => {
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={3} className="total">Total: $729.98</td>
+                <td colSpan={3} className="total">
+                  {totalPrice()}
+                </td>
               </tr>
             </tfoot>
           </table>

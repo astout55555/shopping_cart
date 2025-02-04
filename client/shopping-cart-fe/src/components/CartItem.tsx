@@ -1,10 +1,10 @@
 import {
-  CartItemProps,
+  ProductType,
 } from '../types';
  
-const CartItem = ({ title, quantity, price }: CartItemProps) => {
+const CartItem = ({ id, title, quantity, price }: ProductType) => {
   return ( 
-    <tr>
+    <tr key={id}>
       <td>{title}</td>
       <td>{quantity}</td>
       <td>{price}</td>

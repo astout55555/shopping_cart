@@ -5,7 +5,7 @@ import {
 } from '../types'
 import EditForm from './EditForm';
 
-const Product = ({title, price, quantity}: ProductType) => {
+const Product = ({id, title, price, quantity}: ProductType) => {
   const [editFormVisible, setEditFormVisible] = useState(false);
 
   const toggleEditVisibility = () => {
@@ -21,7 +21,7 @@ const Product = ({title, price, quantity}: ProductType) => {
   }
 
   return (
-    <li className="product">
+    <li key={id} className="product">
       <div className="product-details">
         <h3>{title}</h3>
         <p className="price">{price}</p>
@@ -34,7 +34,7 @@ const Product = ({title, price, quantity}: ProductType) => {
         </div>
         <button className="delete-button"><span>X</span></button>
       </div>
-      <EditForm title={title} price={price} quantity={quantity} />
+      <EditForm id={id} title={title} price={price} quantity={quantity} />
     </li>
   );
 }
