@@ -18,7 +18,7 @@ const App = () => {
   const [cartItems, setCartItems] = useState<ProductType[]>(mockCart);
   const [products, setProducts] = useState<ProductType[]>(mockProducts);
 
-  const toggleVisibility = () => {
+  const toggleAddVisibility = () => {
     setFormVisible(!formVisible);
   };
 
@@ -29,7 +29,7 @@ const App = () => {
       </header>
       <ProductList products={products} />
       <p>
-        <button className="add-product-button" onClick={toggleVisibility}>
+        <button className="add-product-button" onClick={toggleAddVisibility}>
           {formVisible ? "Cancel" : "Add A Product"}
         </button>
       </p>
@@ -38,4 +38,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;

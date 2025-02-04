@@ -1,8 +1,17 @@
+import { useState } from 'react';
+
 import {
   ProductType,
 } from '../types'
+import EditForm from './EditForm';
 
 const Product = ({title, price, quantity}: ProductType) => {
+  const [editFormVisible, setEditFormVisible] = useState(false);
+
+  const toggleEditVisibility = () => {
+    setEditFormVisible(!editFormVisible);
+  };
+
   const addToCartButton = (quantity: number) => {
     if (quantity > 0) {
       return (<button className="add-to-cart">Add to Cart</button>);
@@ -19,12 +28,15 @@ const Product = ({title, price, quantity}: ProductType) => {
         <p className="quantity">{quantity} left in stock</p>
         <div className="actions product-actions">
           {addToCartButton(quantity)}
-          <button className="edit">Edit</button>
+          <button onClick={toggleEditVisibility} className="edit">
+            {editFormVisible ? "Cancel" : "Edit"}
+          </button>
         </div>
         <button className="delete-button"><span>X</span></button>
       </div>
+      <EditForm title={title} price={price} quantity={quantity} />
     </li>
-  )
+  );
 }
 
 export default Product;

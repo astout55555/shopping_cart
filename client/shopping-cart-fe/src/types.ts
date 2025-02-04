@@ -11,7 +11,7 @@ export interface ProductType {
 }
 
 export interface CartProps {
-  cartItems: ProductType[],
+  cartItems: ProductType[]
 }
 
 export interface ProductListProps {
