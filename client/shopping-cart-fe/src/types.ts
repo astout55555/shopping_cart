@@ -1,16 +1,25 @@
-export interface NewProduct {
-  title: string,
-  quantity: number,
-  price: number
-}
+import { z } from 'zod';
 
-export interface ProductType extends NewProduct {
-  _id: string,
-}
+export const newProductSchema = z.object({
+  title: z.string(),
+  quantity: z.number(),
+  price: z.number(),
+});
 
-export interface CartItemType extends ProductType {
-  productId: string
-}
+export const productSchema = newProductSchema.extend({
+  _id: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  __v: z.number().optional(),
+});
+
+export const cartItemSchema = productSchema.extend({
+  productId: z.string(),
+});
+
+export type NewProduct = z.infer<typeof newProductSchema>;
+export type ProductType = z.infer<typeof productSchema>;
+export type CartItemType = z.infer<typeof cartItemSchema>;
 
 type SetFormVisibleType = React.Dispatch<React.SetStateAction<boolean>>;
 type AddProductType = (productInfo: NewProduct) => Promise<void>;
@@ -55,9 +64,4 @@ export interface EditableProductProps {
   removeProduct: RemoveProductType,
   updateProduct: UpdateProductType,
   addItemToCart: AddItemToCartType
-}
-
-export interface AddToCartReturnData {
-  product: ProductType,
-  item: CartItemType
 }

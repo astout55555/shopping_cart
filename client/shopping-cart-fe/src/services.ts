@@ -1,27 +1,39 @@
 import axios from 'axios';
+import { z } from 'zod';
 
 import {
   ProductType,
+  productSchema,
   NewProduct,
   CartItemType,
-  AddToCartReturnData
+  cartItemSchema
 } from './types';
 
 const BASE_URL = 'http://localhost:3001/api/';
 
+const productArraySchema = z.array(productSchema);
+const cartItemArraySchema = z.array(cartItemSchema);
+
+const addToCartReturnDataSchema = z.object({
+  product: productSchema,
+  item: cartItemSchema,
+});
+
+type AddToCartReturnData = z.infer<typeof addToCartReturnDataSchema>;
+
 const getProducts = async () => {
   const response = await axios.get<ProductType[]>(`${BASE_URL}/products`);
-  return response.data;
+  return productArraySchema.parse(response.data);
 };
 
 const createProduct = async (productDetails: NewProduct) => {
   const response = await axios.post<ProductType>(`${BASE_URL}/products`, productDetails);
-  return response.data;
+  return productSchema.parse(response.data);
 };
 
 const editProduct = async (id: string, updatedProductInfo: NewProduct) => {
   const response = await axios.put<ProductType>(`${BASE_URL}/products/${id}`, updatedProductInfo);
-  return response.data;
+  return productSchema.parse(response.data);
 };
 
 const deleteProduct = async (idOfProduct: string) => {
@@ -31,7 +43,7 @@ const deleteProduct = async (idOfProduct: string) => {
 
 const getCartItems = async () => {
   const response = await axios.get<CartItemType[]>(`${BASE_URL}/cart`);
-  return response.data;
+  return cartItemArraySchema.parse(response.data);
 };
 
 const checkout = async () => {
@@ -41,7 +53,7 @@ const checkout = async () => {
 
 const addToCart = async (productId: string) => {
   const response = await axios.post<AddToCartReturnData>(`${BASE_URL}/add-to-cart`, {productId});
-  return response.data;
+  return addToCartReturnDataSchema.parse(response.data);
 }
 
 export default {
