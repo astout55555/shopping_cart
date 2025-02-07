@@ -1,8 +1,8 @@
 import {
-  ProductType,
+  CartItemType,
 } from '../types';
  
-const CartItem = ({ title, quantity, price }: ProductType) => {
+const CartItem = ({ title, quantity, price }: CartItemType) => {
   return ( 
     <>
       <td>{title}</td>

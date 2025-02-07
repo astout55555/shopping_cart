@@ -5,7 +5,12 @@ import {
   CartItemType,
 } from '../types';
 
-const Cart = ({ cartItems }: CartProps) => {
+const Cart = ({ cartItems, checkoutCart }: CartProps) => {
+  const handleCheckout = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    checkoutCart();
+  }
+
   const allCartItems = () => {
     return cartItems.map(
       (cartItem: CartItemType) => (
@@ -58,7 +63,7 @@ const Cart = ({ cartItems }: CartProps) => {
             </tfoot>
           </table>
           <div className="checkout-button">
-            <button className="checkout">Checkout</button>
+            <button className="checkout" onClick={handleCheckout} >Checkout</button>
           </div>
         </div>
       </>

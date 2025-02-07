@@ -11,31 +11,14 @@ import {
   NewProduct
 } from './types';
 
-const mockCart = [
-  {
-    _id: "a",
-    title: "Amazon Kindle E-reader",
-    quantity: 1,
-    price: 79.99,
-    productId: '1'
-  },
-  {
-    _id: "b",
-    title: "Apple 10.5-Inch iPad Pro",
-    quantity: 3,
-    price: 649.99,
-    productId: '2'
-  },
-];
-
 const App = () => {
   const [formVisible, setFormVisible] = React.useState(false);
-  const [cartItems, setCartItems] = React.useState<CartItemType[]>(mockCart);
+  const [cartItems, setCartItems] = React.useState<CartItemType[]>([]);
   const [products, setProducts] = React.useState<ProductType[]>([]);
 
   React.useEffect(() => {
     fetchProducts();
-    // fetchCartItems();
+    fetchCartItems();
   }, []);
 
   const fetchProducts = async () => {
@@ -47,7 +30,23 @@ const App = () => {
     }
   }
 
-  // define fetchCartItems func
+  const fetchCartItems = async () => {
+    try {
+      const cartItems = await apiService.getCartItems();
+      setCartItems(cartItems);
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  const checkoutCart = async () => {
+    try {
+      await apiService.checkout();
+      setCartItems([]);
+    } catch(error) {
+      console.error(error);
+    }
+  }
 
   const addProduct = async (productInfo: NewProduct) => {
     try {
@@ -67,7 +66,7 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  };
+  }
 
   const removeProduct = async (id: string) => {
     try {
@@ -80,12 +79,12 @@ const App = () => {
 
   const toggleAddVisibility = () => {
     setFormVisible(!formVisible);
-  };
+  }
 
   return (
     <>
       <header>
-        <Cart cartItems={cartItems} />
+        <Cart cartItems={cartItems} checkoutCart={checkoutCart} />
       </header>
       <ProductList products={products} removeProduct={removeProduct} updateProduct={updateProduct} />
       <p>
@@ -94,7 +93,7 @@ const App = () => {
       </p>
       {formVisible && <AddProductForm addProduct={addProduct} setFormVisible={setFormVisible} />}
     </>
-  )
+  );
 }
 
 export default App;

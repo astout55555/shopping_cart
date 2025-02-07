@@ -19,7 +19,8 @@ type UpdateProductType = (id: string, newInfoForProduct: NewProduct) => Promise<
 type HandleEditVisibilityToggleType = (event: React.SyntheticEvent) => void;
 
 export interface CartProps {
-  cartItems: CartItemType[]
+  cartItems: CartItemType[],
+  checkoutCart: () => Promise<void>;
 }
 
 export interface ProductListProps {
