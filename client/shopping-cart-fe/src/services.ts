@@ -2,10 +2,8 @@ import axios from 'axios';
 import { z } from 'zod';
 
 import {
-  ProductType,
   productSchema,
   NewProduct,
-  CartItemType,
   cartItemSchema
 } from './types';
 
@@ -21,28 +19,28 @@ const addToCartReturnDataSchema = z.object({
 
 type AddToCartReturnData = z.infer<typeof addToCartReturnDataSchema>;
 
-const getProducts = async () => {
-  const response = await axios.get<ProductType[]>(`${BASE_URL}/products`);
+const getProducts = async (abortController: AbortController) => {
+  const response = await axios.get(`${BASE_URL}/products`, abortController);
   return productArraySchema.parse(response.data);
 };
 
 const createProduct = async (productDetails: NewProduct) => {
-  const response = await axios.post<ProductType>(`${BASE_URL}/products`, productDetails);
+  const response = await axios.post(`${BASE_URL}/products`, productDetails);
   return productSchema.parse(response.data);
 };
 
 const editProduct = async (id: string, updatedProductInfo: NewProduct) => {
-  const response = await axios.put<ProductType>(`${BASE_URL}/products/${id}`, updatedProductInfo);
+  const response = await axios.put(`${BASE_URL}/products/${id}`, updatedProductInfo);
   return productSchema.parse(response.data);
 };
 
 const deleteProduct = async (idOfProduct: string) => {
-  const response = await axios.delete<null>(`${BASE_URL}/products/${idOfProduct}`);
+  const response = await axios.delete(`${BASE_URL}/products/${idOfProduct}`);
   return response.data;
 };
 
-const getCartItems = async () => {
-  const response = await axios.get<CartItemType[]>(`${BASE_URL}/cart`);
+const getCartItems = async (abortController: AbortController) => {
+  const response = await axios.get(`${BASE_URL}/cart`, abortController);
   return cartItemArraySchema.parse(response.data);
 };
 

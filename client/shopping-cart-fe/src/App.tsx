@@ -17,22 +17,26 @@ const App = () => {
   const [products, setProducts] = React.useState<ProductType[]>([]);
 
   React.useEffect(() => {
-    fetchProducts();
-    fetchCartItems();
+    const abortController = new AbortController();
+    fetchProducts(abortController);
+    fetchCartItems(abortController);
+    return () => {
+      abortController.abort();
+    }
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (abortController: AbortController) => {
     try {
-      const allProducts = await apiService.getProducts();
+      const allProducts = await apiService.getProducts(abortController);
       setProducts(allProducts);
     } catch(error) {
       console.error(error);
     }
   };
 
-  const fetchCartItems = async () => {
+  const fetchCartItems = async (abortController: AbortController) => {
     try {
-      const cartItems = await apiService.getCartItems();
+      const cartItems = await apiService.getCartItems(abortController);
       setCartItems(cartItems);
     } catch(error) {
       console.error(error);
