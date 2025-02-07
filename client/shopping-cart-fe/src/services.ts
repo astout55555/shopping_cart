@@ -4,6 +4,7 @@ import {
   ProductType,
   NewProduct,
   CartItemType,
+  AddToCartReturnData
 } from './types';
 
 const BASE_URL = 'http://localhost:3001/api/';
@@ -36,6 +37,11 @@ const getCartItems = async () => {
 const checkout = async () => {
   const response = await axios.post<null>(`${BASE_URL}/checkout`);
   return response.data;
+};
+
+const addToCart = async (productId: string) => {
+  const response = await axios.post<AddToCartReturnData>(`${BASE_URL}/add-to-cart`, {productId});
+  return response.data;
 }
 
 export default {
@@ -45,4 +51,5 @@ export default {
   deleteProduct,
   getCartItems,
   checkout,
+  addToCart
 };

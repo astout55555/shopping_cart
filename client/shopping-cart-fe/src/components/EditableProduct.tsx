@@ -7,7 +7,7 @@ import {
 import Product from './Product';
 import EditForm from './EditForm';
 
-const EditableProduct = ({product, removeProduct, updateProduct}: EditableProductProps) => {
+const EditableProduct = ({product, removeProduct, updateProduct, addItemToCart}: EditableProductProps) => {
   const [editFormVisible, setEditFormVisible] = React.useState(false);
 
   const handleEditVisibilityToggle = (event: React.SyntheticEvent) => {
@@ -17,7 +17,7 @@ const EditableProduct = ({product, removeProduct, updateProduct}: EditableProduc
 
   return (
     <>
-      <Product product={product} removeProduct={removeProduct} 
+      <Product product={product} removeProduct={removeProduct} addItemToCart={addItemToCart}
         editFormVisible={editFormVisible} handleEditVisibilityToggle={handleEditVisibilityToggle} />
       { editFormVisible && <EditForm product={product} updateProduct={updateProduct}
         handleEditVisibilityToggle={handleEditVisibilityToggle} /> }

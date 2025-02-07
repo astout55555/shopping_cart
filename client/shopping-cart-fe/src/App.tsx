@@ -28,7 +28,7 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const fetchCartItems = async () => {
     try {
@@ -37,7 +37,25 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
+
+  const addItemToCart = async (productId: string) => {
+    try {
+      const { product, item } = await apiService.addToCart(productId);
+      setProducts((prevProducts) => prevProducts.map((prevProduct) => {
+        return prevProduct._id === product._id ? product : prevProduct;
+      }));
+      if (cartItems.map((cartItem) => cartItem.productId).includes(productId)) {
+        setCartItems((prevCartItems) => prevCartItems.map((prevCartItem) => {
+          return prevCartItem._id === item._id ? item : prevCartItem;
+        }));
+      } else {
+        setCartItems((prevCartItems) => [...prevCartItems, item]);
+      }
+    } catch(error) {
+      console.error(error);
+    }
+  };
 
   const checkoutCart = async () => {
     try {
@@ -46,7 +64,7 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const addProduct = async (productInfo: NewProduct) => {
     try {
@@ -55,7 +73,7 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const updateProduct = async (id: string, newInfoForProduct: NewProduct) => {
     try {
@@ -66,7 +84,7 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const removeProduct = async (id: string) => {
     try {
@@ -75,18 +93,18 @@ const App = () => {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const toggleAddVisibility = () => {
     setFormVisible(!formVisible);
-  }
+  };
 
   return (
     <>
       <header>
         <Cart cartItems={cartItems} checkoutCart={checkoutCart} />
       </header>
-      <ProductList products={products} removeProduct={removeProduct} updateProduct={updateProduct} />
+      <ProductList products={products} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />
       <p>
         {!formVisible &&
           <button className="add-product-button" onClick={toggleAddVisibility}>Add A Product</button>}

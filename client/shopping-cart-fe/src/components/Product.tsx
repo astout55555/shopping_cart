@@ -1,20 +1,28 @@
 import {
   ProductProps,
-} from '../types'
+} from '../types';
 
-const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityToggle }: ProductProps) => {
+const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityToggle, addItemToCart }: ProductProps) => {
   const handleDelete = (event: React.SyntheticEvent) => {
     event.preventDefault();
     removeProduct(product._id);
   };
 
+  const handleAddToCart = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    console.log(addItemToCart);
+    addItemToCart(product._id);
+  };
+
   const addToCartButton = (quantity: number) => {
     if (quantity > 0) {
-      return (<button className="add-to-cart">Add to Cart</button>);
+      return (
+        <button className="add-to-cart" onClick={handleAddToCart} >Add to Cart</button>
+      );
     } else {
       return (<button className="add-to-cart" disabled>Add to Cart</button>);
     }
-  }
+  };
 
   return (
     <>
@@ -32,6 +40,6 @@ const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityT
       </div>
     </>
   );
-}
+};
 
 export default Product;

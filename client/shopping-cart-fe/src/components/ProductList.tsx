@@ -4,12 +4,12 @@ import {
 
 import EditableProduct from './EditableProduct';
  
-const ProductList = ({ products, removeProduct, updateProduct }: ProductListProps) => {
+const ProductList = ({ products, removeProduct, updateProduct, addItemToCart }: ProductListProps) => {
   const allProducts = () => {
     return products.map(
       (product) => (
         <li key={ product._id } className="product">
-          <EditableProduct product={product} removeProduct={removeProduct} updateProduct={updateProduct} />
+          <EditableProduct product={product} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />
         </li>
       )
     );

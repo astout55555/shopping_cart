@@ -17,16 +17,18 @@ type AddProductType = (productInfo: NewProduct) => Promise<void>;
 type RemoveProductType = (id: string) => Promise<void>;
 type UpdateProductType = (id: string, newInfoForProduct: NewProduct) => Promise<void>;
 type HandleEditVisibilityToggleType = (event: React.SyntheticEvent) => void;
+type AddItemToCartType = (productId: string) => Promise<void>;
 
 export interface CartProps {
   cartItems: CartItemType[],
-  checkoutCart: () => Promise<void>;
+  checkoutCart: () => Promise<void>
 }
 
 export interface ProductListProps {
   products: ProductType[],
   removeProduct: RemoveProductType,
-  updateProduct: UpdateProductType
+  updateProduct: UpdateProductType,
+  addItemToCart: AddItemToCartType
 }
 
 export interface AddProductFormProps {
@@ -38,7 +40,8 @@ export interface ProductProps {
   product: ProductType,
   removeProduct: RemoveProductType,
   editFormVisible: boolean,
-  handleEditVisibilityToggle: HandleEditVisibilityToggleType
+  handleEditVisibilityToggle: HandleEditVisibilityToggleType,
+  addItemToCart: AddItemToCartType
 }
 
 export interface EditFormProps {
@@ -50,5 +53,11 @@ export interface EditFormProps {
 export interface EditableProductProps {
   product: ProductType,
   removeProduct: RemoveProductType,
-  updateProduct: UpdateProductType
+  updateProduct: UpdateProductType,
+  addItemToCart: AddItemToCartType
+}
+
+export interface AddToCartReturnData {
+  product: ProductType,
+  item: CartItemType
 }
