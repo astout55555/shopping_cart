@@ -1,15 +1,11 @@
-import { useState } from 'react';
-
 import {
-  ProductType,
+  ProductProps,
 } from '../types'
-import EditForm from './EditForm';
 
-const Product = ({id, title, price, quantity}: ProductType) => {
-  const [editFormVisible, setEditFormVisible] = useState(false);
-
-  const toggleEditVisibility = () => {
-    setEditFormVisible(!editFormVisible);
+const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityToggle }: ProductProps) => {
+  const handleDelete = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    removeProduct(product._id);
   };
 
   const addToCartButton = (quantity: number) => {
@@ -21,21 +17,20 @@ const Product = ({id, title, price, quantity}: ProductType) => {
   }
 
   return (
-    <li key={id} className="product">
+    <>
       <div className="product-details">
-        <h3>{title}</h3>
-        <p className="price">{price}</p>
-        <p className="quantity">{quantity} left in stock</p>
+        <h3>{product.title}</h3>
+        <p className="price">{product.price}</p>
+        <p className="quantity">{product.quantity} left in stock</p>
         <div className="actions product-actions">
-          {addToCartButton(quantity)}
-          <button onClick={toggleEditVisibility} className="edit">
+          {addToCartButton(product.quantity)}
+          <button onClick={handleEditVisibilityToggle} className="edit">
             {editFormVisible ? "Cancel" : "Edit"}
           </button>
         </div>
-        <button className="delete-button"><span>X</span></button>
+        <button className="delete-button" onClick={handleDelete} ><span>X</span></button>
       </div>
-      <EditForm id={id} title={title} price={price} quantity={quantity} />
-    </li>
+    </>
   );
 }
 

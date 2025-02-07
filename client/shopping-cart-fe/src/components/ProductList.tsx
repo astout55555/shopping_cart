@@ -1,13 +1,17 @@
-import Product from './Product';
-
 import {
   ProductListProps,
 } from '../types';
+
+import EditableProduct from './EditableProduct';
  
-const ProductList = ({ products }: ProductListProps) => {
+const ProductList = ({ products, removeProduct, updateProduct }: ProductListProps) => {
   const allProducts = () => {
     return products.map(
-      (product) => <Product {...product} />
+      (product) => (
+        <li key={ product._id } className="product">
+          <EditableProduct product={product} removeProduct={removeProduct} updateProduct={updateProduct} />
+        </li>
+      )
     );
   }
 

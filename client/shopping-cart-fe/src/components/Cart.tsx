@@ -2,13 +2,17 @@ import CartItem from "./CartItem";
 
 import {
   CartProps,
-  ProductType,
+  CartItemType,
 } from '../types';
 
 const Cart = ({ cartItems }: CartProps) => {
   const allCartItems = () => {
     return cartItems.map(
-      (cartItem: ProductType) => (<CartItem {...cartItem} />)
+      (cartItem: CartItemType) => (
+        <tr key={ cartItem._id }>
+          <CartItem {...cartItem} />
+        </tr>
+      )
     );
   }
 

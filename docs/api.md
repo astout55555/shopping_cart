@@ -162,6 +162,8 @@ The cart items are returned in JSON format.
 
 #### 1.5.2.1. Example Response
 
+Note: "_id" and "productId" will differ. The productId refers to the _id of the product, while the _id of the cartItem is its own ID as a cart item.
+
 ```json
 [
   {

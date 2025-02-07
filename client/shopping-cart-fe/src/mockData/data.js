@@ -27,15 +27,17 @@ export const mockProducts = [
 
 export const mockCart = [
   {
-    _id: "1",
+    _id: "a",
     title: "Amazon Kindle E-reader",
     quantity: 1,
     price: 79.99,
+    productId: '1'
   },
   {
-    _id: "2",
+    _id: "b",
     title: "Apple 10.5-Inch iPad Pro",
     quantity: 3,
     price: 649.99,
+    productId: '2'
   },
 ];
