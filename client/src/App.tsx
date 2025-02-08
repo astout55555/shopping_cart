@@ -60,6 +60,7 @@ const App = () => {
       setProducts((prevProducts) => prevProducts.map((prevProduct) => {
         return prevProduct._id === product._id ? product : prevProduct;
       }));
+
       if (cartItems.map((cartItem) => cartItem.productId).includes(productId)) {
         setCartItems((prevCartItems) => prevCartItems.map((prevCartItem) => {
           return prevCartItem._id === item._id ? item : prevCartItem;

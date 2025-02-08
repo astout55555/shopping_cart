@@ -10,7 +10,6 @@ const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityT
 
   const handleAddToCart = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    console.log(addItemToCart);
     addItemToCart(product._id);
   };
 

@@ -22,7 +22,7 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
   }
 
   const totalPrice = () => {
-    return cartItems.map((item) => item.price).reduce((accum, price) => accum + price);
+    return cartItems.map((item) => item.price * item.quantity).reduce((accum, price) => accum + price);
   }
 
   if (cartItems.length === 0) {
@@ -57,7 +57,7 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
             <tfoot>
               <tr>
                 <td colSpan={3} className="total">
-                  {totalPrice()}
+                  ${totalPrice().toFixed(2)}
                 </td>
               </tr>
             </tfoot>
