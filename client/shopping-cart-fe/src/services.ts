@@ -35,8 +35,8 @@ const editProduct = async (id: string, updatedProductInfo: NewProduct) => {
 };
 
 const deleteProduct = async (idOfProduct: string) => {
-  const response = await axios.delete(`${BASE_URL}/products/${idOfProduct}`);
-  return response.data;
+  await axios.delete(`${BASE_URL}/products/${idOfProduct}`);
+  return null;
 };
 
 const getCartItems = async (abortController: AbortController) => {
@@ -45,8 +45,8 @@ const getCartItems = async (abortController: AbortController) => {
 };
 
 const checkout = async () => {
-  const response = await axios.post<null>(`${BASE_URL}/checkout`);
-  return response.data;
+  await axios.post(`${BASE_URL}/checkout`);
+  return null;
 };
 
 const addToCart = async (productId: string) => {

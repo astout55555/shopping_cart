@@ -2,7 +2,7 @@ import React from 'react';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import AddProductForm from './components/AddProductForm';
-
+import { ZodError } from 'zod';
 import apiService from './services';
 
 import {
@@ -15,6 +15,7 @@ const App = () => {
   const [formVisible, setFormVisible] = React.useState(false);
   const [cartItems, setCartItems] = React.useState<CartItemType[]>([]);
   const [products, setProducts] = React.useState<ProductType[]>([]);
+  const [error, setError] = React.useState(false);
 
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -30,7 +31,12 @@ const App = () => {
       const allProducts = await apiService.getProducts(abortController);
       setProducts(allProducts);
     } catch(error) {
-      console.error(error);
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -39,7 +45,12 @@ const App = () => {
       const cartItems = await apiService.getCartItems(abortController);
       setCartItems(cartItems);
     } catch(error) {
-      console.error(error);
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -57,7 +68,12 @@ const App = () => {
         setCartItems((prevCartItems) => [...prevCartItems, item]);
       }
     } catch(error) {
-      console.error(error);
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -66,6 +82,7 @@ const App = () => {
       await apiService.checkout();
       setCartItems([]);
     } catch(error) {
+      setError(true);
       console.error(error);
     }
   };
@@ -75,7 +92,12 @@ const App = () => {
       const newProduct = await apiService.createProduct(productInfo);
       setProducts((prevProducts) => [...prevProducts, newProduct]);
     } catch(error) {
-      console.error(error);
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -86,7 +108,12 @@ const App = () => {
         return product._id === id ? updatedProduct : product;
       }));
     } catch(error) {
-      console.error(error);
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -95,6 +122,7 @@ const App = () => {
       await apiService.deleteProduct(id);
       setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
     } catch(error) {
+      setError(true);
       console.error(error);
     }
   };
@@ -102,6 +130,16 @@ const App = () => {
   const toggleAddVisibility = () => {
     setFormVisible(!formVisible);
   };
+
+  if (error) {
+    return (
+      <>
+        <h1>Uh oh, we've encountered an error!</h1>
+        <p>Please check the console for error details.</p>
+        <a href="http://localhost:5173">Or, you can return home by clicking this link.</a>
+      </>
+    )
+  }
 
   return (
     <>
