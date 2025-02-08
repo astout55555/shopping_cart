@@ -28,7 +28,7 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
 
   return ( 
     <div className="add-form">
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit} role='form' >
         <div className="input-group">
           <label htmlFor="product-name">Product Name:</label>
           <input

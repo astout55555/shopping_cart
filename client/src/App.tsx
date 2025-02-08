@@ -145,6 +145,7 @@ const App = () => {
   return (
     <>
       <header>
+        <h1>The Shop!</h1>
         <Cart cartItems={cartItems} checkoutCart={checkoutCart} />
       </header>
       <ProductList products={products} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />

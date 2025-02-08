@@ -7,7 +7,7 @@ import {
   cartItemSchema
 } from './types';
 
-const BASE_URL = 'http://localhost:3001/api/';
+const BASE_URL = '/api/';
 
 const productArraySchema = z.array(productSchema);
 const cartItemArraySchema = z.array(cartItemSchema);

@@ -1,5 +1,5 @@
 {
-  "name": "shopping-cart-fe",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,9 +12,8 @@
     "test:watch": "vitest --watch"
   },
   "dependencies": {
-    "@types/axios": "^0.9.36",
-    "@types/node": "^22.13.1",
     "axios": "^1.7.9",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zod": "^3.24.1"

@@ -23,7 +23,7 @@ const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditForm
   return ( 
     <div className="edit-form">
       <h3>Edit Product</h3>
-      <form onSubmit={handleUpdate} >
+      <form onSubmit={handleUpdate} role='form'>
         <div className="input-group">
           <label htmlFor="product-name">Title</label>
           <input
