@@ -31,9 +31,7 @@ const Product = ({product, removeProduct, editFormVisible, handleEditVisibilityT
         <p className="quantity">{product.quantity} left in stock</p>
         <div className="actions product-actions">
           {addToCartButton(product.quantity)}
-          <button onClick={handleEditVisibilityToggle} className="edit">
-            {editFormVisible ? "Cancel" : "Edit"}
-          </button>
+          {!editFormVisible && <button onClick={handleEditVisibilityToggle} className="edit">Edit</button>}
         </div>
         <button className="delete-button" onClick={handleDelete} ><span>X</span></button>
       </div>

@@ -17,7 +17,7 @@ beforeEach(() => {
 
 it('does not show the AddProductForm at first', () => {
   const form = screen.queryByRole('form');
-  expect(form).toBeNull();
+  expect(form).not.toBeInTheDocument();
 });
 
 it('does show the Cart on app render', () => {
@@ -43,5 +43,6 @@ it("displays the AddProductForm component when user clicks 'Add A Product' butto
   const form = screen.queryByRole('form');
   expect(form).toBeInTheDocument();
 
-  expect(screen.queryByRole('button', {name: /Add A Product/i})).toBeNull();
+  const removedButton = screen.queryByRole('button', {name: /Add A Product/i});
+  expect(removedButton).not.toBeInTheDocument();
 });
