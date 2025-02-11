@@ -13,7 +13,7 @@ mockedGetCartItems.mockResolvedValue(mockCart);
 
 beforeEach(() => {
   render(<App/>);
-});
+})
 
 it('does not show the AddProductForm at first', () => {
   const form = screen.queryByRole('form');
