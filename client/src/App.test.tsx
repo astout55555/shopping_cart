@@ -5,6 +5,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 vi.mock('./services.ts');
+
+// import axios from 'axios';
+// vi.mock('axios');
+// const mockedAxiosGet = vi.mocked(axios.get);
+// ...do I need to do something re: axios & deep mocking to avoid the error?
+// ...does this have anything to do with the act warning?
 const mockedGetProducts = vi.mocked(apiServices.getProducts);
 const mockedGetCartItems = vi.mocked(apiServices.getCartItems);
 
@@ -36,6 +42,7 @@ it("does show an enabled 'Add A Product' button", () => {
   expect(addProductButton).toBeEnabled();
 })
 
+// noticing a `stderr` in the logs for this test...
 it("displays the AddProductForm component when user clicks 'Add A Product' button, then removes button", async () => {
   const addProductButton = screen.getByRole('button', {name: /Add A Product/i});
   const user = userEvent.setup();
