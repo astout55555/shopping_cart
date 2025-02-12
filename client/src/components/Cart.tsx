@@ -1,5 +1,4 @@
 import CartItem from "./CartItem";
-
 import {
   CartProps,
   CartItemType,
@@ -14,7 +13,7 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
   const allCartItems = () => {
     return cartItems.map(
       (cartItem: CartItemType) => (
-        <tr key={ cartItem._id }>
+        <tr key={ cartItem._id } >
           <CartItem {...cartItem} />
         </tr>
       )

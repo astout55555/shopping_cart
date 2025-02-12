@@ -4,18 +4,23 @@ import Cart from './components/Cart';
 import AddProductForm from './components/AddProductForm';
 import { ZodError } from 'zod';
 import apiService from './services';
-
 import {
-  ProductType,
-  CartItemType,
-  NewProduct
+  NewProduct,
+  AddToCartReturnDataType,
 } from './types';
+import itemsReducer from './reducers/itemsReducer';
+import {
+  ItemsState,
+} from './reducers/itemsReducer';
+import { ThemeContext, ThemeContextType, themeStyles } from './providers/ThemeProvider';
+
+const initialItemsState: ItemsState = {products: [], cartItems: []};
 
 const App = () => {
+  const [itemsState, dispatch] = React.useReducer(itemsReducer, initialItemsState);
   const [formVisible, setFormVisible] = React.useState(false);
-  const [cartItems, setCartItems] = React.useState<CartItemType[]>([]);
-  const [products, setProducts] = React.useState<ProductType[]>([]);
   const [error, setError] = React.useState(false);
+  const { theme, handleThemeChange } = React.useContext<ThemeContextType>(ThemeContext);
 
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -29,7 +34,12 @@ const App = () => {
   const fetchProducts = async (abortController: AbortController) => {
     try {
       const allProducts = await apiService.getProducts(abortController);
-      setProducts(allProducts);
+      dispatch({
+        type: 'FETCH_PRODUCTS',
+        payload: {
+          allProducts,
+        }
+      });
     } catch(error) {
       setError(true);
       if (error instanceof ZodError) {
@@ -43,7 +53,12 @@ const App = () => {
   const fetchCartItems = async (abortController: AbortController) => {
     try {
       const cartItems = await apiService.getCartItems(abortController);
-      setCartItems(cartItems);
+      dispatch({
+        type: 'FETCH_CART_ITEMS',
+        payload: {
+          cartItems,
+        }
+      })
     } catch(error) {
       setError(true);
       if (error instanceof ZodError) {
@@ -51,47 +66,18 @@ const App = () => {
       } else {
         console.error(error);
       }
-    }
-  };
-
-  const addItemToCart = async (productId: string) => {
-    try {
-      const { product, item } = await apiService.addToCart(productId);
-      setProducts((prevProducts) => prevProducts.map((prevProduct) => {
-        return prevProduct._id === product._id ? product : prevProduct;
-      }));
-
-      if (cartItems.map((cartItem) => cartItem.productId).includes(productId)) {
-        setCartItems((prevCartItems) => prevCartItems.map((prevCartItem) => {
-          return prevCartItem._id === item._id ? item : prevCartItem;
-        }));
-      } else {
-        setCartItems((prevCartItems) => [...prevCartItems, item]);
-      }
-    } catch(error) {
-      setError(true);
-      if (error instanceof ZodError) {
-        console.error(error.issues);
-      } else {
-        console.error(error);
-      }
-    }
-  };
-
-  const checkoutCart = async () => {
-    try {
-      await apiService.checkout();
-      setCartItems([]);
-    } catch(error) {
-      setError(true);
-      console.error(error);
     }
   };
 
   const addProduct = async (productInfo: NewProduct) => {
     try {
       const newProduct = await apiService.createProduct(productInfo);
-      setProducts((prevProducts) => [...prevProducts, newProduct]);
+      dispatch({
+        type: 'ADD_PRODUCT',
+        payload: {
+          newProduct,
+        },
+      });
     } catch(error) {
       setError(true);
       if (error instanceof ZodError) {
@@ -105,9 +91,12 @@ const App = () => {
   const updateProduct = async (id: string, newInfoForProduct: NewProduct) => {
     try {
       const updatedProduct = await apiService.editProduct(id, newInfoForProduct);
-      setProducts((prevProducts) => prevProducts.map((product) => {
-        return product._id === id ? updatedProduct : product;
-      }));
+      dispatch({
+        type: 'UPDATE_PRODUCT',
+        payload: {
+          updatedProduct,
+        },
+      });
     } catch(error) {
       setError(true);
       if (error instanceof ZodError) {
@@ -121,7 +110,43 @@ const App = () => {
   const removeProduct = async (id: string) => {
     try {
       await apiService.deleteProduct(id);
-      setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+      dispatch({
+        type: 'REMOVE_PRODUCT',
+        payload: {
+          id,
+        },
+      });
+    } catch(error) {
+      setError(true);
+      console.error(error);
+    }
+  };
+
+  const addItemToCart = async (productId: string) => {
+    try {
+      const responseData: AddToCartReturnDataType = await apiService.addToCart(productId);
+      dispatch({
+        type: 'ADD_ITEM_TO_CART',
+        payload: {
+          responseData,
+        },
+      });
+    } catch(error) {
+      setError(true);
+      if (error instanceof ZodError) {
+        console.error(error.issues);
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  const checkoutCart = async () => {
+    try {
+      await apiService.checkout();
+      dispatch({
+        type: 'CHECKOUT_CART',
+      });
     } catch(error) {
       setError(true);
       console.error(error);
@@ -143,18 +168,19 @@ const App = () => {
   }
 
   return (
-    <>
-      <header>
+    <div style={themeStyles[theme]} >
+      <header style={themeStyles[theme]}>
         <h1>The Shop!</h1>
-        <Cart cartItems={cartItems} checkoutCart={checkoutCart} />
+        <Cart cartItems={itemsState.cartItems} checkoutCart={checkoutCart} />
       </header>
-      <ProductList products={products} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />
-      <p>
+      <ProductList products={itemsState.products} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />
+      <p style={themeStyles[theme]}>
         {!formVisible &&
           <button className="add-product-button" onClick={toggleAddVisibility}>Add A Product</button>}
       </p>
       {formVisible && <AddProductForm addProduct={addProduct} setFormVisible={setFormVisible} />}
-    </>
+      <button onClick={handleThemeChange} style={{...themeStyles[theme], 'backgroundColor': 'blue'}}>Change Theme</button>
+    </div>
   );
 }
 

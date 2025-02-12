@@ -21,6 +21,16 @@ export type NewProduct = z.infer<typeof newProductSchema>;
 export type ProductType = z.infer<typeof productSchema>;
 export type CartItemType = z.infer<typeof cartItemSchema>;
 
+export const productArraySchema = z.array(productSchema);
+export const cartItemArraySchema = z.array(cartItemSchema);
+
+export const addToCartReturnDataSchema = z.object({
+  product: productSchema,
+  item: cartItemSchema,
+});
+
+export type AddToCartReturnDataType = z.infer<typeof addToCartReturnDataSchema>;
+
 type SetFormVisibleType = React.Dispatch<React.SetStateAction<boolean>>;
 type AddProductType = (productInfo: NewProduct) => Promise<void>;
 type RemoveProductType = (id: string) => Promise<void>;

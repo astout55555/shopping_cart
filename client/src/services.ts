@@ -1,23 +1,15 @@
 import axios from 'axios';
-import { z } from 'zod';
 
 import {
   productSchema,
   NewProduct,
-  cartItemSchema
+  productArraySchema,
+  cartItemArraySchema,
+  addToCartReturnDataSchema,
 } from './types';
 
 const BASE_URL = '/api/';
 
-const productArraySchema = z.array(productSchema);
-const cartItemArraySchema = z.array(cartItemSchema);
-
-const addToCartReturnDataSchema = z.object({
-  product: productSchema,
-  item: cartItemSchema,
-});
-
-type AddToCartReturnData = z.infer<typeof addToCartReturnDataSchema>;
 
 const getProducts = async (abortController: AbortController) => {
   const response = await axios.get(`${BASE_URL}/products`, abortController);
@@ -50,7 +42,7 @@ const checkout = async () => {
 };
 
 const addToCart = async (productId: string) => {
-  const response = await axios.post<AddToCartReturnData>(`${BASE_URL}/add-to-cart`, {productId});
+  const response = await axios.post(`${BASE_URL}/add-to-cart`, {productId});
   return addToCartReturnDataSchema.parse(response.data);
 }
 
