@@ -1,10 +1,10 @@
 import App from './App';
-import apiServices from './services';
+import apiServices from './services/productService';
 import { mockProducts, mockCart } from './mockData/data';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-vi.mock('./services.ts');
+vi.mock('./services/productService.ts');
 
 // import axios from 'axios';
 // vi.mock('axios');

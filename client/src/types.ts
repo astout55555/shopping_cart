@@ -72,7 +72,6 @@ export interface EditFormProps {
 
 export interface EditableProductProps {
   product: ProductType,
-  displayPrice: string,
   removeProduct: RemoveProductType,
   updateProduct: UpdateProductType,
   addItemToCart: AddItemToCartType

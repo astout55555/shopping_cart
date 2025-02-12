@@ -1,11 +1,11 @@
 import EditableProduct from './EditableProduct';
-import apiServices from '../services';
+import productService from '../services/productService';
 import { mockProducts } from '../mockData/data';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-vi.mock('../services.ts');
-const mockedGetProducts = vi.mocked(apiServices.getProducts);
+vi.mock('../services/productService.ts');
+const mockedGetProducts = vi.mocked(productService.getProducts);
 mockedGetProducts.mockResolvedValue(mockProducts);
 
 it('renders its child Product component', () => {
