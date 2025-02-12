@@ -1,18 +1,27 @@
 import React from 'react';
-
 import {
   EditFormProps,
 } from '../types';
+import { CurrencyContext, CurrencyContextType } from '../providers/CurrencyProvider';
 
-const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditFormProps) => {
-  const [formValues, setFormValues] = React.useState({
-    title: product.title, price: `${product.price}`, quantity: `${product.quantity}`
-  });
+const EditForm = ({product, displayPrice, updateProduct, handleEditVisibilityToggle}: EditFormProps) => {
+  const [title, setTitle] = React.useState(product.title);
+  const [price, setPrice] = React.useState(displayPrice);
+  const [quantity, setQuantity] = React.useState(product.quantity.toString());
+  const { currency, rateUSDToEUR } = React.useContext<CurrencyContextType>(CurrencyContext);
 
-  const handleUpdate = (event: React.SyntheticEvent) => {
+  React.useEffect(() => {
+    setPrice(displayPrice);
+  }, [currency, displayPrice]);
+
+  const handleUpdate = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      updateProduct(product._id, {...formValues, price: +formValues.price, quantity: +formValues.quantity});
+      const priceInUSD = currency === '$' ? +price : (+price / rateUSDToEUR).toFixed(2);
+      await updateProduct(
+        product._id,
+        {title, price: +priceInUSD, quantity: +quantity}
+      );
       handleEditVisibilityToggle(event);
     } catch(error) {
       console.error(error);
@@ -24,41 +33,41 @@ const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditForm
       <h3>Edit Product</h3>
       <form onSubmit={handleUpdate} role='form'>
         <div className="input-group">
-          <label htmlFor="product-name">Title</label>
+          <label htmlFor="product-name">Title:</label>
           <input
             type="text"
             id="product-name"
-            value={formValues.title}
+            value={title}
             aria-label="Product Name"
-            onChange={(event) => setFormValues({...formValues, title: event.target.value})}
+            onChange={(event) => setTitle(event.target.value)}
           />
         </div>
 
         <div className="input-group">
-          <label htmlFor="product-price">Price</label>
+          <label htmlFor="product-price">Price (in {currency}):</label>
           <input
             type="number"
             id="product-price"
-            value={formValues.price}
+            value={price}
             aria-label="Product Price"
-            onChange={(event) => setFormValues({...formValues, price: event.target.value})}
+            onChange={(event) => setPrice(event.target.value)}
           />
         </div>
 
         <div className="input-group">
-          <label htmlFor="product-quantity">Quantity</label>
+          <label htmlFor="product-quantity">Quantity:</label>
           <input
             type="number"
             id="product-quantity"
-            value={formValues.quantity}
+            value={quantity}
             aria-label="Product Quantity"
-            onChange={(event) => setFormValues({...formValues, quantity: event.target.value})}
+            onChange={(event) => setQuantity(event.target.value)}
           />
         </div>
 
         <div className="actions form-actions">
           <button type="submit">Update</button>
-          <button type="button" onClick={handleEditVisibilityToggle} >Cancel</button>
+          <button type="button" onClick={handleEditVisibilityToggle}>Cancel</button>
         </div>
       </form>
     </div>

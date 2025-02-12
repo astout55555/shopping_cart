@@ -65,12 +65,14 @@ export interface ProductProps {
 
 export interface EditFormProps {
   product: ProductType,
+  displayPrice: string,
   updateProduct: UpdateProductType,
   handleEditVisibilityToggle: HandleEditVisibilityToggleType
 }
 
 export interface EditableProductProps {
   product: ProductType,
+  displayPrice: string,
   removeProduct: RemoveProductType,
   updateProduct: UpdateProductType,
   addItemToCart: AddItemToCartType

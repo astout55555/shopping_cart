@@ -3,17 +3,33 @@ import React from "react";
 import {
   AddProductFormProps,
 } from '../types';
+import { CurrencyContext, CurrencyContextType } from "../providers/CurrencyProvider";
 
 const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => {
-  const [formValues, setFormValues] = React.useState({
-    title: '', price: '0', quantity: '0'
-  });
+  const [title, setTitle] = React.useState('');
+  const [price, setPrice] = React.useState('0');
+  const [quantity, setQuantity] = React.useState('0');
+
+  const { currency, rateUSDToEUR } = React.useContext<CurrencyContextType>(CurrencyContext);
+
+  React.useEffect(() => {
+    setPrice((prevPrice) => {
+      if (currency === '$') {
+        return (+prevPrice / rateUSDToEUR).toFixed(2);
+      } else {
+        return (+prevPrice * rateUSDToEUR).toFixed(2);
+      }
+    });
+  }, [currency, rateUSDToEUR]);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      await addProduct({...formValues, price: +formValues.price, quantity: +formValues.quantity});
-      setFormValues({title: '', price: '0', quantity: '0'});
+      const priceInUSD = currency === '$' ? +price : (+price / rateUSDToEUR).toFixed(2);
+      await addProduct({title, price: +priceInUSD, quantity: +quantity});
+      setTitle('');
+      setPrice('0');
+      setQuantity('0');
       setFormVisible(false);
     } catch(error) {
       console.error(error);
@@ -35,12 +51,12 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
             id="product-name"
             name="product-name"
             required
-            onChange={(event) => setFormValues({...formValues, title: event.target.value})}
-            value={formValues.title}
+            onChange={(event) => setTitle(event.target.value)}
+            value={title}
           />
         </div>
         <div className="input-group">
-          <label htmlFor="product-price">Price:</label>
+          <label htmlFor="product-price">Price (in {currency}):</label>
           <input
             type="number"
             id="product-price"
@@ -48,8 +64,8 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
             min="0"
             step="0.01"
             required
-            onChange={(event) => setFormValues({...formValues, price: event.target.value})}
-            value={formValues.price}
+            onChange={(event) => setPrice(event.target.value)}
+            value={price}
           />
         </div>
         <div className="input-group">
@@ -60,8 +76,8 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
             name="product-quantity"
             min="0"
             required
-            onChange={(event) => setFormValues({...formValues, quantity: event.target.value})}
-            value={formValues.quantity}
+            onChange={(event) => setQuantity(event.target.value)}
+            value={quantity}
           />
         </div>
         <div className="actions form-actions">
