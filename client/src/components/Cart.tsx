@@ -1,10 +1,14 @@
+import React from 'react';
 import CartItem from "./CartItem";
 import {
   CartProps,
   CartItemType,
 } from '../types';
+import { CurrencyContext, CurrencyContextType } from '../providers/CurrencyProvider';
 
 const Cart = ({ cartItems, checkoutCart }: CartProps) => {
+  const { currency, rateUSDToEUR } = React.useContext<CurrencyContextType>(CurrencyContext);
+
   const handleCheckout = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     checkoutCart();
@@ -21,7 +25,13 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
   }
 
   const totalPrice = () => {
-    return cartItems.map((item) => item.price * item.quantity).reduce((accum, price) => accum + price);
+    return cartItems.map((item) => {
+      if (currency === '€') {
+        return item.price * item.quantity * rateUSDToEUR;
+      } else {
+        return item.price * item.quantity;
+      }
+    }).reduce((accum, price) => accum + price);
   }
 
   if (cartItems.length === 0) {
@@ -29,7 +39,7 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
       <div className="cart">
         <h2>Your Cart</h2>
         <p>Your cart is empty</p>
-        <p>Total: $0</p>
+        <p>Total: {currency}0</p>
         <button className="checkout" disabled>Checkout</button>
       </div>
     );
@@ -51,7 +61,7 @@ const Cart = ({ cartItems, checkoutCart }: CartProps) => {
           <tfoot>
             <tr>
               <td colSpan={3} className="total">
-                ${totalPrice().toFixed(2)}
+                {currency}{totalPrice().toFixed(2)}
               </td>
             </tr>
           </tfoot>

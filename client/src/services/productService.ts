@@ -6,7 +6,7 @@ import {
   productArraySchema,
   cartItemArraySchema,
   addToCartReturnDataSchema,
-} from './types';
+} from '../types';
 
 const BASE_URL = '/api/';
 

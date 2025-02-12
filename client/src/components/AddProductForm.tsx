@@ -2,19 +2,18 @@ import React from "react";
 
 import {
   AddProductFormProps,
-  NewProduct
 } from '../types';
 
 const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => {
-  const [formValues, setFormValues] = React.useState<NewProduct>({
-    title: '', price: 0, quantity: 0
+  const [formValues, setFormValues] = React.useState({
+    title: '', price: '0', quantity: '0'
   });
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      await addProduct(formValues);
-      setFormValues({title: '', price: 0, quantity: 0});
+      await addProduct({...formValues, price: +formValues.price, quantity: +formValues.quantity});
+      setFormValues({title: '', price: '0', quantity: '0'});
       setFormVisible(false);
     } catch(error) {
       console.error(error);
@@ -49,7 +48,7 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
             min="0"
             step="0.01"
             required
-            onChange={(event) => setFormValues({...formValues, price: Number(event.target.value)})}
+            onChange={(event) => setFormValues({...formValues, price: event.target.value})}
             value={formValues.price}
           />
         </div>
@@ -61,7 +60,7 @@ const AddProductForm = ({ addProduct, setFormVisible }: AddProductFormProps) => 
             name="product-quantity"
             min="0"
             required
-            onChange={(event) => setFormValues({...formValues, quantity: Number(event.target.value)})}
+            onChange={(event) => setFormValues({...formValues, quantity: event.target.value})}
             value={formValues.quantity}
           />
         </div>

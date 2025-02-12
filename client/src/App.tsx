@@ -3,7 +3,7 @@ import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import AddProductForm from './components/AddProductForm';
 import { ZodError } from 'zod';
-import apiService from './services';
+import productService from './services/productService';
 import {
   NewProduct,
   AddToCartReturnDataType,
@@ -13,6 +13,7 @@ import {
   ItemsState,
 } from './reducers/itemsReducer';
 import { ThemeContext, ThemeContextType, themeStyles } from './providers/ThemeProvider';
+import { CurrencyContext, CurrencyContextType } from './providers/CurrencyProvider';
 
 const initialItemsState: ItemsState = {products: [], cartItems: []};
 
@@ -21,6 +22,7 @@ const App = () => {
   const [formVisible, setFormVisible] = React.useState(false);
   const [error, setError] = React.useState(false);
   const { theme, handleThemeChange } = React.useContext<ThemeContextType>(ThemeContext);
+  const { handleCurrencyChange } = React.useContext<CurrencyContextType>(CurrencyContext);
 
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -33,7 +35,7 @@ const App = () => {
 
   const fetchProducts = async (abortController: AbortController) => {
     try {
-      const allProducts = await apiService.getProducts(abortController);
+      const allProducts = await productService.getProducts(abortController);
       dispatch({
         type: 'FETCH_PRODUCTS',
         payload: {
@@ -52,7 +54,7 @@ const App = () => {
 
   const fetchCartItems = async (abortController: AbortController) => {
     try {
-      const cartItems = await apiService.getCartItems(abortController);
+      const cartItems = await productService.getCartItems(abortController);
       dispatch({
         type: 'FETCH_CART_ITEMS',
         payload: {
@@ -71,7 +73,7 @@ const App = () => {
 
   const addProduct = async (productInfo: NewProduct) => {
     try {
-      const newProduct = await apiService.createProduct(productInfo);
+      const newProduct = await productService.createProduct(productInfo);
       dispatch({
         type: 'ADD_PRODUCT',
         payload: {
@@ -90,7 +92,7 @@ const App = () => {
 
   const updateProduct = async (id: string, newInfoForProduct: NewProduct) => {
     try {
-      const updatedProduct = await apiService.editProduct(id, newInfoForProduct);
+      const updatedProduct = await productService.editProduct(id, newInfoForProduct);
       dispatch({
         type: 'UPDATE_PRODUCT',
         payload: {
@@ -109,7 +111,7 @@ const App = () => {
 
   const removeProduct = async (id: string) => {
     try {
-      await apiService.deleteProduct(id);
+      await productService.deleteProduct(id);
       dispatch({
         type: 'REMOVE_PRODUCT',
         payload: {
@@ -124,7 +126,7 @@ const App = () => {
 
   const addItemToCart = async (productId: string) => {
     try {
-      const responseData: AddToCartReturnDataType = await apiService.addToCart(productId);
+      const responseData: AddToCartReturnDataType = await productService.addToCart(productId);
       dispatch({
         type: 'ADD_ITEM_TO_CART',
         payload: {
@@ -143,7 +145,7 @@ const App = () => {
 
   const checkoutCart = async () => {
     try {
-      await apiService.checkout();
+      await productService.checkout();
       dispatch({
         type: 'CHECKOUT_CART',
       });
@@ -176,10 +178,20 @@ const App = () => {
       <ProductList products={itemsState.products} removeProduct={removeProduct} updateProduct={updateProduct} addItemToCart={addItemToCart} />
       <p style={themeStyles[theme]}>
         {!formVisible &&
-          <button className="add-product-button" onClick={toggleAddVisibility}>Add A Product</button>}
+          <button className="add-product-button" onClick={toggleAddVisibility}>
+            Add A Product
+          </button>
+        }
       </p>
-      {formVisible && <AddProductForm addProduct={addProduct} setFormVisible={setFormVisible} />}
-      <button onClick={handleThemeChange} style={{...themeStyles[theme], 'backgroundColor': 'blue'}}>Change Theme</button>
+      {formVisible &&
+        <AddProductForm addProduct={addProduct} setFormVisible={setFormVisible} />
+      }
+      <button onClick={handleThemeChange} style={{...themeStyles[theme], 'backgroundColor': 'blue'}}>
+        Change Theme
+      </button>
+      <button onClick={handleCurrencyChange} style={{...themeStyles[theme], 'backgroundColor': 'red'}}>
+        Change Currency
+      </button>
     </div>
   );
 }

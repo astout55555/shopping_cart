@@ -2,18 +2,17 @@ import React from 'react';
 
 import {
   EditFormProps,
-  NewProduct,
 } from '../types';
 
 const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditFormProps) => {
-  const [formValues, setFormValues] = React.useState<NewProduct>({
-    title: product.title, price: product.price, quantity: product.quantity
+  const [formValues, setFormValues] = React.useState({
+    title: product.title, price: `${product.price}`, quantity: `${product.quantity}`
   });
 
   const handleUpdate = (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
-      updateProduct(product._id, formValues);
+      updateProduct(product._id, {...formValues, price: +formValues.price, quantity: +formValues.quantity});
       handleEditVisibilityToggle(event);
     } catch(error) {
       console.error(error);
@@ -42,7 +41,7 @@ const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditForm
             id="product-price"
             value={formValues.price}
             aria-label="Product Price"
-            onChange={(event) => setFormValues({...formValues, price: Number(event.target.value)})}
+            onChange={(event) => setFormValues({...formValues, price: event.target.value})}
           />
         </div>
 
@@ -53,7 +52,7 @@ const EditForm = ({product, updateProduct, handleEditVisibilityToggle}: EditForm
             id="product-quantity"
             value={formValues.quantity}
             aria-label="Product Quantity"
-            onChange={(event) => setFormValues({...formValues, quantity: Number(event.target.value)})}
+            onChange={(event) => setFormValues({...formValues, quantity: event.target.value})}
           />
         </div>
 
