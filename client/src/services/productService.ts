@@ -8,7 +8,7 @@ import {
   addToCartReturnDataSchema,
 } from '../types';
 
-const BASE_URL = '/api/';
+const BASE_URL = '/api';
 
 
 const getProducts = async (abortController: AbortController) => {
